@@ -1,3 +1,5 @@
+package gamecode;
+
 /**
  * @author: Zzz_tjhd
  * @date: 2020-09-02 22:58
@@ -5,7 +7,7 @@
 public class App4 {
     public static void main(String[] args) {
         MyJFrame mj = new MyJFrame();
-//        MyJFrame mj1 = new MyJFrame();
+//        gamecode.MyJFrame mj1 = new gamecode.MyJFrame();
 
 /*        mj.setSize(600,800);
 

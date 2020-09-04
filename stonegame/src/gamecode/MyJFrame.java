@@ -1,18 +1,26 @@
+package gamecode;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
 /**
  * @author: Zzz_tjhd
  * @date: 2020-09-02 22:58
  */
-public class MyJFrame extends JFrame {
+public class MyJFrame extends JFrame implements KeyListener {
 
     //定义二维数据方便管理数据
     int[][] datas = new int[4][4];
+    //定义一个二维数组，元素是最终胜利的的元素
+    int[][] victory = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
     int x0 = 0;
     int y0 = 0;
+    //统计
+    int step = 0;
 
     public MyJFrame() {
 
@@ -63,6 +71,8 @@ public class MyJFrame extends JFrame {
         this.setDefaultCloseOperation(3);
         //置顶
         this.setAlwaysOnTop(true);
+        //添加监听事件
+        this.addKeyListener(this);
         //取消内部居中放置样式
         this.setLayout(null);
     }
@@ -73,13 +83,19 @@ public class MyJFrame extends JFrame {
         jm.setSize(600, 30);
         //创建菜单名称
         JMenu ju = new JMenu("功能");
+        JMenu ju1 = new JMenu("关于");
         //创建菜单下功能选项
         JMenuItem ji = new JMenuItem("重新游戏");
         //重新监听事件
         ji.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("重新游戏");
+                //重新打乱顺序
+                initData();
+                //统计清0
+                step = 0;
+                //绘制整个界面
+                initImage();
             }
         });
         JMenuItem ji1 = new JMenuItem("退出游戏");
@@ -90,16 +106,39 @@ public class MyJFrame extends JFrame {
                 System.exit(0);
             }
         });
+        JMenuItem ji2 = new JMenuItem("联系我们");
+        ji2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //创建弹框
+                JDialog jd = new JDialog();
+                ImageIcon ii = new ImageIcon("./stonegame//image//about.png");
+                JLabel jl = new JLabel(ii);
+                jl.setBounds(0, 0, 344, 344);
+                jd.add(jl);
+                //弹框设置大小
+                jd.setSize(344, 344);
+                //弹框设置到顶层
+                jd.setAlwaysOnTop(true);
+                //弹框居中
+                jd.setLocationRelativeTo(null);
+                //显示弹框
+                jd.setVisible(true);
+            }
+        });
+
 
         //三个增加关联关系，功能关联菜单，菜单关联菜单栏，把菜单栏添加到窗体上
         ju.add(ji);
         ju.add(ji1);
+        ju1.add(ji2);
         jm.add(ju);
+        jm.add(ju1);
         this.setJMenuBar(jm);
     }
 
     public void initImage() {
-/*        //添加图片
+/*      //添加图片
         ImageIcon ii1 = new ImageIcon("./stonegame/image/1.png");
         //创建一个jlable对象，为了设置图片的位置和宽高
         JLabel jl1 = new JLabel(ii1);
@@ -119,85 +158,26 @@ public class MyJFrame extends JFrame {
         jl3.setBounds(200 + 50, 0 + 90, 100, 100);
         this.add(jl3);
 
-        //图片4
-        ImageIcon ii4 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\4.png");
-        JLabel jl4 = new JLabel(ii4);
-        jl4.setBounds(300 + 50, 0 + 90, 100, 100);
-        this.add(jl4);
-
-
-        //图片5
-        ImageIcon ii5 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\5.png");
-        JLabel jl5 = new JLabel(ii5);
-        jl5.setBounds(0 + 50, 100 + 90, 100, 100);
-        this.add(jl5);
-
-        //图片6
-        ImageIcon ii6 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\6.png");
-        JLabel jl6 = new JLabel(ii6);
-        jl6.setBounds(100 + 50, 100 + 90, 100, 100);
-        this.add(jl6);
-
-        //图片7
-        ImageIcon ii7 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\7.png");
-        JLabel jl7 = new JLabel(ii7);
-        jl7.setBounds(200 + 50, 100 + 90, 100, 100);
-        this.add(jl7);
-
-        //图片8
-        ImageIcon ii8 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\8.png");
-        JLabel jl8 = new JLabel(ii8);
-        jl8.setBounds(300 + 50, 100 + 90, 100, 100);
-        this.add(jl8);
-
-        //图片9
-        ImageIcon ii9 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\9.png");
-        JLabel jl9 = new JLabel(ii9);
-        jl9.setBounds(0 + 50, 200 + 90, 100, 100);
-        this.add(jl9);
-
-        //图片10
-        ImageIcon ii10 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\10.png");
-        JLabel jl10 = new JLabel(ii10);
-        jl10.setBounds(100 + 50, 200 + 90, 100, 100);
-        this.add(jl10);
-
-        //图片11
-        ImageIcon ii11 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\11.png");
-        JLabel jl11 = new JLabel(ii11);
-        jl11.setBounds(200 + 50, 200 + 90, 100, 100);
-        this.add(jl11);
-
-        //图片12
-        ImageIcon ii12 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\12.png");
-        JLabel jl12 = new JLabel(ii12);
-        jl12.setBounds(300 + 50, 200 + 90, 100, 100);
-        this.add(jl12);
-
-        //图片13
-        ImageIcon ii13 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\13.png");
-        JLabel jl13 = new JLabel(ii13);
-        jl13.setBounds(0 + 50, 300 + 90, 100, 100);
-        this.add(jl13);
-
-        //图片14
-        ImageIcon ii14 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\14.png");
-        JLabel jl14 = new JLabel(ii14);
-        jl14.setBounds(100 + 50, 300 + 90, 100, 100);
-        this.add(jl14);
-
-        //图片15
-        ImageIcon ii15 = new ImageIcon("E:\\muke\\test\\stonegame\\image\\15.png");
-        JLabel jl15 = new JLabel(ii15);
-        jl15.setBounds(200 + 50, 300 + 90, 100, 100);
-        this.add(jl15);*/
-
 /*        for (int i = 1; i <= 4; i++) {
             ImageIcon image = new ImageIcon("./stonegame//image//" + i + ".png");
             JLabel jl = new JLabel(image);
             jl.setBounds((i - 1) * 100 + 50, 90, 100, 100);
             this.add(jl);
         }*/
+        //将页面中所有的图片删除
+        this.getContentPane().removeAll();
+
+        JLabel label_step = new JLabel("步数：" + step);
+        label_step.setBounds(50, 20, 100, 20);
+        this.add(label_step);
+
+        //判断游戏是否胜利
+        if (victory()) {
+            ImageIcon image = new ImageIcon("./stonegame//image//win.png");
+            JLabel jl = new JLabel(image);
+            jl.setBounds(514 / 2 - 266 / 2, 230, 266, 88);
+            this.add(jl);
+        }
 
         for (int i = 0; i < datas.length; i++) {
             for (int j = 0; j < datas[i].length; j++) {
@@ -207,8 +187,6 @@ public class MyJFrame extends JFrame {
                     JLabel jl = new JLabel(image);
                     jl.setBounds(j * 100 + 50, i * 100 + 90, 100, 100);
                     this.add(jl);
-                } else {
-
                 }
             }
         }
@@ -218,5 +196,88 @@ public class MyJFrame extends JFrame {
         JLabel jl16 = new JLabel(bg);
         jl16.setBounds(26, 30, 450, 484);
         this.add(jl16);
+
+        //将整个界面重新绘制
+        this.getContentPane().repaint();
+    }
+
+    //判断胜利
+    public boolean victory() {
+        //判断两个数组是否相等
+        for (int i = 0; i < datas.length; i++) {
+            for (int j = 0; j < datas[i].length; j++) {
+                if (datas[i][j] != victory[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    //松开
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    //按下
+    @Override
+    public void keyReleased(KeyEvent e) {
+        //获取按键的数字
+        int keyCode = e.getKeyCode();
+        move(keyCode);
+        //重新绘制界面
+        initImage();
+    }
+
+    private void move(int keyCode) {
+        if (keyCode == 37) {
+            if (y0 == 3) {
+                return;
+            }
+            //左
+            datas[x0][y0] = datas[x0][y0 + 1];
+            datas[x0][y0 + 1] = 0;
+            y0++;
+            step++;
+        } else if (keyCode == 38) {
+            if (x0 == 3) {
+                return;
+            }
+            //上
+            datas[x0][y0] = datas[x0 + 1][y0];
+            datas[x0 + 1][y0] = 0;
+            x0++;
+            step++;
+        } else if (keyCode == 39) {
+            if (y0 == 0) {
+                return;
+            }
+            //右
+            datas[x0][y0] = datas[x0][y0 - 1];
+            datas[x0][y0 - 1] = 0;
+            y0--;
+            step++;
+        } else if (keyCode == 40) {
+            if (x0 == 0) {
+                return;
+            }
+            //下
+            datas[x0][y0] = datas[x0 - 1][y0];
+            datas[x0 - 1][y0] = 0;
+            x0--;
+            step++;
+        } else if (keyCode == 87) {
+            //后门键
+            datas = new int[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+        } else {
+            System.out.println(keyCode);
+            System.out.println("按键错了...");
+        }
     }
 }

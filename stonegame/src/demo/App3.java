@@ -1,3 +1,5 @@
+package demo;
+
 import javax.swing.*;
 
 public class App3{
